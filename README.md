@@ -50,10 +50,10 @@ book/
 │   │       └── custom.css      # 品牌色（绿 #00c853）
 │   ├── index.md                # 首页
 │   ├── about.md                # 关于
-│   ├── part-1/                 # 第一部分 · 入门
+│   ├── part-1/
 │   │   ├── chapter-01.md
 │   │   └── chapter-02.md
-│   └── part-2/                 # 第二部分 · 实战
+│   └── part-2/
 │       ├── chapter-03.md
 │       └── chapter-04.md
 └── .github/workflows/
