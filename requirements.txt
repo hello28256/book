@@ -1,0 +1,5 @@
+# MkDocs Material + 插件
+# 锁版本是为了 CI 构建可复现
+mkdocs==1.6.1
+mkdocs-material[imaging]==9.5.49
+mkdocs-glightbox==0.4.0

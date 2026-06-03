@@ -1,0 +1,110 @@
+# =============================================================================
+# 站点基础信息
+# 注意：site_url 必须指向 GitHub Pages 子路径，否则导航/资源路径会错
+# =============================================================================
+site_name: 我的书
+site_url: https://hello28256.github.io/book/
+site_author: hello28256
+site_description: 用 MkDocs Material 写的一本书
+copyright: Copyright &copy; 2026 hello28256
+
+# 仓库信息（右上角显示 GitHub 链接，并支持 "Edit this page"）
+repo_name: hello28256/book
+repo_url: https://github.com/hello28256/book
+edit_uri: edit/main/docs/
+
+# =============================================================================
+# Material 主题
+# =============================================================================
+theme:
+  name: material
+  language: zh
+  # 浅色/深色主题切换
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 切换到深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 切换到浅色模式
+  font:
+    text: Noto Sans SC
+    code: JetBrains Mono
+  features:
+    - navigation.tabs            # 顶部 tab 导航
+    - navigation.tabs.sticky     # tab 固定
+    - navigation.sections        # 侧栏分组（章节）
+    - navigation.expand          # 默认展开侧栏
+    - navigation.path            # 面包屑
+    - navigation.indexes         # 章节首页（section index）
+    - navigation.top             # 回到顶部
+    - search.suggest             # 搜索建议
+    - search.highlight           # 搜索结果高亮
+    - search.share               # 分享搜索链接
+    - content.code.copy          # 代码块一键复制
+    - content.code.annotate      # 代码注解
+    - content.action.edit        # "编辑此页" 按钮
+    - toc.follow                 # 右侧 TOC 跟随滚动
+
+# =============================================================================
+# Markdown 扩展（PyMdown Extensions）
+# =============================================================================
+markdown_extensions:
+  - admonition                   # 警告框（!!! note）
+  - attr_list                    # HTML 属性
+  - def_list                     # 定义列表
+  - footnotes                    # 脚注
+  - md_in_html                   # HTML 中嵌 Markdown
+  - tables                       # 表格
+  - toc:
+      permalink: true            # 标题锚链接
+  - pymdownx.details             # 折叠块
+  - pymdownx.superfences:        # 增强代码块（支持嵌套 + Mermaid）
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:             # 标签页
+      alternate_style: true
+  - pymdownx.tasklist:           # 任务列表 [ ]
+      custom_checkbox: true
+  - pymdownx.highlight:          # 代码高亮
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite        # 行内代码高亮
+  - pymdownx.snippets            # 片段复用
+  - pymdownx.emoji:              # Emoji
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+# =============================================================================
+# 插件
+# =============================================================================
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - glightbox                    # 图片灯箱
+
+# =============================================================================
+# 导航结构（书的章节目录）
+# =============================================================================
+nav:
+  - 首页: index.md
+  - 第一部分 - 基础:
+      - 第 1 章 引言: part-1/chapter-01.md
+      - 第 2 章 起步: part-1/chapter-02.md
+  - 第二部分 - 进阶:
+      - 第 3 章 待补充: part-2/chapter-03.md
+  - 关于:
+      - 关于本书: about.md
