@@ -8,11 +8,11 @@ hero:
   actions:
     - theme: brand
       text: 🐳 Docker 极简手册
-      link: /book1/
+      link: /Docker/
 features:
   - icon: 🐳
     title: Docker 极简手册
     details: 写给后端工程师的容器实战 —— 从一条命令到生产部署。5 章、3 小时读完，每章都有可直接 copy 的代码。
-    link: /book1/
+    link: /Docker/
     linkText: 开始阅读
 ---
