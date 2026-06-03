@@ -147,43 +147,43 @@ api:
 
 开发期你希望改代码立刻生效，生产期你希望镜像不可变。用 **override 文件**做切换：
 
-=== "docker-compose.yml（共用）"
+#### docker-compose.yml（共用）
 
-    ```yaml
-    services:
-      api:
-        build: ./api
-        environment:
-          DATABASE_URL: postgres://...
-        depends_on:
-          - db
-    ```
+```yaml
+services:
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgres://...
+    depends_on:
+      - db
+```
 
-=== "docker-compose.override.yml（开发，默认加载）"
+#### docker-compose.override.yml（开发，默认加载）
 
-    ```yaml
-    services:
-      api:
-        volumes:
-          - ./api/src:/app/src   # 挂载代码热重载
-        command: npm run dev
-        environment:
-          NODE_ENV: development
-        ports:
-          - "9229:9229"          # 暴露 Node 调试端口
-    ```
+```yaml
+services:
+  api:
+    volumes:
+      - ./api/src:/app/src   # 挂载代码热重载
+    command: npm run dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - "9229:9229"          # 暴露 Node 调试端口
+```
 
-=== "docker-compose.prod.yml（生产，显式指定）"
+#### docker-compose.prod.yml（生产，显式指定）
 
-    ```yaml
-    services:
-      api:
-        image: registry.example.com/api:v3.2.1
-        restart: always
-        deploy:
-          resources:
-            limits: { cpus: '1', memory: 512M }
-    ```
+```yaml
+services:
+  api:
+    image: registry.example.com/api:v3.2.1
+    restart: always
+    deploy:
+      resources:
+        limits: { cpus: '1', memory: 512M }
+```
 
 用法：
 
@@ -244,34 +244,38 @@ db:
 
 ## 3.7 常见错误
 
-!!! danger "❌ Volume 路径写反"
-    ```yaml
-    volumes:
-      - /var/lib/postgresql/data:pgdata    # 反了！
-      - pgdata:/var/lib/postgresql/data    # 正确：Volume 名:容器内路径
-    ```
+::: danger ❌ Volume 路径写反
+```yaml
+volumes:
+  - /var/lib/postgresql/data:pgdata    # 反了！
+  - pgdata:/var/lib/postgresql/data    # 正确：Volume 名:容器内路径
+```
+:::
 
-!!! danger "❌ 改了 yaml 但没重启"
-    ```bash
-    # 改完 docker-compose.yml 后必须：
-    docker compose up -d         # ← 这个会自动检测变化重建
-    # 不是
-    docker compose restart       # ← 这个只重启，不会应用配置变化
-    ```
+::: danger ❌ 改了 yaml 但没重启
+```bash
+# 改完 docker-compose.yml 后必须：
+docker compose up -d         # ← 这个会自动检测变化重建
+# 不是
+docker compose restart       # ← 这个只重启，不会应用配置变化
+```
+:::
 
-!!! danger "❌ 把 .env 提交到 git"
-    一旦推到公网仓库，密码就泄露了。
-    立刻 [用 git-filter-repo 重写历史](https://github.com/newren/git-filter-repo) + 轮换所有密钥。
+::: danger ❌ 把 .env 提交到 git
+一旦推到公网仓库，密码就泄露了。
+立刻 [用 git-filter-repo 重写历史](https://github.com/newren/git-filter-repo) + 轮换所有密钥。
+:::
 
 ## 本章要点
 
-!!! abstract "Take-aways"
-    - Compose 把"一堆 docker run 命令"变成**一个可版本化的 yaml**
-    - **服务名即 hostname**：容器之间互相用名字访问
-    - **healthcheck + depends_on** 解决启动顺序
-    - 开发 vs 生产：用 **override 文件**切换
-    - 密码用 **.env**，永远不要 commit
+::: info Take-aways
+- Compose 把"一堆 docker run 命令"变成**一个可版本化的 yaml**
+- **服务名即 hostname**：容器之间互相用名字访问
+- **healthcheck + depends_on** 解决启动顺序
+- 开发 vs 生产：用 **override 文件**切换
+- 密码用 **.env**，永远不要 commit
+:::
 
 下一章我们看上生产前必须做的事。
 
-[→ 第 4 章：上生产](chapter-04.md){ .md-button .md-button--primary }
+<a href="chapter-04.md" class="VPButton VPButton--primary">→ 第 4 章：上生产</a>

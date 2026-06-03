@@ -1,12 +1,23 @@
-# MkDocs 构建产物
+# MkDocs 构建产物（历史遗留）
 site/
 
-# Python
+# VitePress 构建产物
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Python（保留 .env 警告）
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+
+# Node
+node_modules/
+*.log
+
+# 环境变量
 .env
+.env.*
 
 # macOS
 .DS_Store

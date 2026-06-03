@@ -139,9 +139,10 @@ USER nonroot
 CMD ["index.js"]
 ```
 
-!!! warning "distroless 没有 sh"
-    `docker exec -it container sh` 会报错。
-    调试时临时用 `:debug` 标签，里面有 busybox。
+::: warning distroless 没有 sh
+`docker exec -it container sh` 会报错。
+调试时临时用 `:debug` 标签，里面有 busybox。
+:::
 
 ## 4.3 日志：12-Factor 的金律
 
@@ -247,30 +248,37 @@ push 到 main → 自动打包 → 推到 `ghcr.io/your-org/repo:main`。
 
 ## 4.6 7 个新手必踩的坑
 
-??? bug "坑 1：构建巨慢，每次都从头来"
-    没用 BuildKit 缓存。CI 里加 `cache-from: type=gha`，本地用 `DOCKER_BUILDKIT=1 docker build`。
+::: details 坑 1：构建巨慢，每次都从头来
+没用 BuildKit 缓存。CI 里加 `cache-from: type=gha`，本地用 `DOCKER_BUILDKIT=1 docker build`。
+:::
 
-??? bug "坑 2：M1 Mac 构建的镜像推上去线上跑不起来"
-    macOS 是 arm64，生产是 amd64。要么用 `--platform linux/amd64` 构建，要么用 `docker buildx` 多平台构建。
+::: details 坑 2：M1 Mac 构建的镜像推上去线上跑不起来
+macOS 是 arm64，生产是 amd64。要么用 `--platform linux/amd64` 构建，要么用 `docker buildx` 多平台构建。
+:::
 
-??? bug "坑 3：容器里 `localhost` 访问不到宿主机服务"
-    容器的 localhost 是容器自己，不是 Mac。
-    用 `host.docker.internal`（仅 Desktop / OrbStack）或直接连服务名。
+::: details 坑 3：容器里 `localhost` 访问不到宿主机服务
+容器的 localhost 是容器自己，不是 Mac。
+用 `host.docker.internal`（仅 Desktop / OrbStack）或直接连服务名。
+:::
 
-??? bug "坑 4：写了 EXPOSE 但端口还是访问不到"
-    `EXPOSE` 只是文档，不开端口。要 `docker run -p 3000:3000` 或 Compose 写 `ports`。
+::: details 坑 4：写了 EXPOSE 但端口还是访问不到
+`EXPOSE` 只是文档，不开端口。要 `docker run -p 3000:3000` 或 Compose 写 `ports`。
+:::
 
-??? bug "坑 5：容器秒退，logs 看不到原因"
-    用 `docker logs <id>`（不是 `docker logs <name>`，有时容器还没注册名字就死了）。
-    或者 `docker run` 不加 `-d` 直接前台跑看错误。
+::: details 坑 5：容器秒退，logs 看不到原因
+用 `docker logs <id>`（不是 `docker logs <name>`，有时容器还没注册名字就死了）。
+或者 `docker run` 不加 `-d` 直接前台跑看错误。
+:::
 
-??? bug "坑 6：磁盘被吃光"
-    `docker system df` 看占用，`docker system prune -a --volumes` 一键清。
-    生产服务器上配 logging 的 `max-size` 和 `max-file`。
+::: details 坑 6：磁盘被吃光
+`docker system df` 看占用，`docker system prune -a --volumes` 一键清。
+生产服务器上配 logging 的 `max-size` 和 `max-file`。
+:::
 
-??? bug "坑 7：改了 Dockerfile 但 `docker run` 还是老行为"
-    Dockerfile 改了要 **重新 build**：
-    `docker compose up -d --build`，或单独 `docker build -t ... && docker run ...`。
+::: details 坑 7：改了 Dockerfile 但 `docker run` 还是老行为
+Dockerfile 改了要 **重新 build**：
+`docker compose up -d --build`，或单独 `docker build -t ... && docker run ...`。
+:::
 
 ## 4.7 进阶：什么时候该上 Kubernetes
 
@@ -308,9 +316,9 @@ flowchart LR
     style F fill:#5b6abf,color:#fff
 ```
 
-!!! quote "送你一句话"
-    工具是手段不是目的。Docker 不会让你成为更好的工程师，但它会**减少**让你成为更差工程师的因素。
+::: info 送你一句话
+工具是手段不是目的。Docker 不会让你成为更好的工程师，但它会**减少**让你成为更差工程师的因素。
+:::
 
-[← 回到首页](../index.md){ .md-button }
-&nbsp;&nbsp;
-[👀 关于本书](../about.md){ .md-button }
+<a href="../index.md" class="VPButton">← 回到首页</a>
+<a href="../about.md" class="VPButton">👀 关于本书</a>
