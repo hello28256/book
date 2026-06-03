@@ -38,7 +38,7 @@ pnpm docs:preview
 
 ## 目录结构
 
-```
+```text
 book/
 ├── package.json                # pnpm 依赖 + scripts
 ├── pnpm-lock.yaml              # 锁版本
@@ -50,12 +50,10 @@ book/
 │   │       └── custom.css      # 品牌色（绿 #00c853）
 │   ├── index.md                # 首页
 │   ├── about.md                # 关于
-│   ├── part-1/
-│   │   ├── chapter-01.md
-│   │   └── chapter-02.md
-│   └── part-2/
-│       ├── chapter-03.md
-│       └── chapter-04.md
+│   ├── chapter-01.md           # 第 1 章
+│   ├── chapter-02.md           # 第 2 章
+│   ├── chapter-03.md           # 第 3 章
+│   └── chapter-04.md           # 第 4 章
 └── .github/workflows/
     └── deploy.yml              # GitHub Actions 自动部署
 ```
@@ -64,7 +62,7 @@ book/
 
 推送到 `main` 分支会自动触发 GitHub Actions：
 
-1. checkout → Node 20 → pnpm 9 → `pnpm install`
+1. checkout → Node 22 → corepack pnpm → `pnpm install`
 2. `pnpm run docs:build` 生成 `docs/.vitepress/dist/`
 3. 上传 dist 到 Pages artifact → 部署
 

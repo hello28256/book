@@ -15,10 +15,10 @@
 
 ## 你会学到什么
 
-1. [第 1 章 为什么需要 Docker](part-1/chapter-01.md) —— 容器解决了什么、又没解决什么
-2. [第 2 章 五分钟跑起第一个容器](part-1/chapter-02.md) —— 安装、镜像、容器、Volume 一次跑通
-3. [第 3 章 Compose 编排多服务](part-2/chapter-03.md) —— 多容器协作，docker-compose.yml 从入门到生产
-4. [第 4 章 上生产前你必须知道的事](part-2/chapter-04.md) —— 日志、健康检查、滚动更新、7 个真实坑
+1. [第 1 章 为什么需要 Docker](chapter-01.md) —— 容器解决了什么、又没解决什么
+2. [第 2 章 五分钟跑起第一个容器](chapter-02.md) —— 安装、镜像、容器、Volume 一次跑通
+3. [第 3 章 Compose 编排多服务](chapter-03.md) —— 多容器协作，docker-compose.yml 从入门到生产
+4. [第 4 章 上生产前你必须知道的事](chapter-04.md) —— 日志、健康检查、滚动更新、7 个真实坑
 
 - [关于本书](about.md) —— 写作理念、版本日志、致谢
 
@@ -45,6 +45,6 @@
 
 ## 开始阅读
 
-[👉 从第 1 章开始](part-1/chapter-01.md){ .md-button .md-button--primary }
+[👉 从第 1 章开始](chapter-01.md)
 &nbsp;&nbsp;
-[🤔 跳到生产实战](part-2/chapter-04.md){ .md-button }
+[🤔 跳到生产实战](chapter-04.md)

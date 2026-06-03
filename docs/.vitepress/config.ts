@@ -42,16 +42,10 @@ export default withMermaid(
         },
       ],
 
-      // 侧栏（4 级深度，平铺不分组）
-      sidebar: {
-        '/': [
-          { text: '第 1 章 为什么需要 Docker', link: '/part-1/chapter-01' },
-          { text: '第 2 章 五分钟跑起第一个容器', link: '/part-1/chapter-02' },
-          { text: '第 3 章 Compose 编排多服务', link: '/part-2/chapter-03' },
-          { text: '第 4 章 上生产前你必须知道的事', link: '/part-2/chapter-04' },
-          { text: '关于本书', link: '/about' },
-        ],
-      },
+      // 侧栏：VitePress 默认会自动从 srcDir 扫描所有 .md，
+      // 用每个文件的 H1 作为标题，路径作为链接。
+      // 这里不写 sidebar，让新加的 chapter-N.md 自动出现在侧栏。
+      // 如果未来需要分组（如"入门"/"实战"），可以再加显式配置。
 
       // 内置搜索（MiniSearch，支持中文）
       search: {
