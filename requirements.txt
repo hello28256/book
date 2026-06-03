@@ -1,5 +1,8 @@
 # MkDocs Material + 插件
 # 锁版本是为了 CI 构建可复现
+# 注意：去掉了 [imaging] extra —— 它依赖 Pillow + cairosvg + 系统库 (libcairo2/libffi-dev)，
+#       Linux CI 默认没装这些系统库，pip 会编译失败。
+#       如果后续要做 social cards / image processing 再加回来，并在 workflow 里 apt-get 装系统库。
 mkdocs==1.6.1
-mkdocs-material[imaging]==9.5.49
+mkdocs-material==9.5.49
 mkdocs-glightbox==0.4.0
