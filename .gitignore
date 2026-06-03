@@ -4,6 +4,7 @@ site/
 # VitePress 构建产物
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+docs/.vitepress/.temp/
 
 # Python（保留 .env 警告）
 __pycache__/
