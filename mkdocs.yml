@@ -2,10 +2,10 @@
 # 站点基础信息
 # 注意：site_url 必须指向 GitHub Pages 子路径，否则导航/资源路径会错
 # =============================================================================
-site_name: 我的书
+site_name: Docker 极简手册
 site_url: https://hello28256.github.io/book/
 site_author: hello28256
-site_description: 用 MkDocs Material 写的一本书
+site_description: 写给后端工程师的容器实战 —— 从一条命令到生产部署
 copyright: Copyright &copy; 2026 hello28256
 
 # 仓库信息（右上角显示 GitHub 链接，并支持 "Edit this page"）
@@ -101,10 +101,11 @@ plugins:
 # =============================================================================
 nav:
   - 首页: index.md
-  - 第一部分 - 基础:
-      - 第 1 章 引言: part-1/chapter-01.md
-      - 第 2 章 起步: part-1/chapter-02.md
-  - 第二部分 - 进阶:
-      - 第 3 章 待补充: part-2/chapter-03.md
+  - 第一部分 - 入门:
+      - 第 1 章 为什么需要 Docker: part-1/chapter-01.md
+      - 第 2 章 五分钟跑起第一个容器: part-1/chapter-02.md
+  - 第二部分 - 实战:
+      - 第 3 章 Compose 编排多服务: part-2/chapter-03.md
+      - 第 4 章 上生产前你必须知道的事: part-2/chapter-04.md
   - 关于:
       - 关于本书: about.md

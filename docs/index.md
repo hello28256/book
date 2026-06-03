@@ -1,24 +1,52 @@
-# 我的书
+# Docker 极简手册
 
-> 用 MkDocs Material 写的一本书。
+> 写给后端工程师的容器实战 —— 从一条命令到生产部署。
 
-## 关于本书
+## 这本书是什么
 
-这里写本书的简短介绍：
-- **目标读者**：xxx
-- **你将学到**：xxx
-- **预计阅读时间**：xxx
+如果你已经写了几年代码，知道"环境不一致"和"部署痛苦"是什么感觉，那这本书就是为你写的。
 
-## 如何阅读
+我不打算从"什么是容器化"讲到天荒地老。**这本书的承诺**：
 
-- 左侧目录树按章节组织
-- 顶部 tab 切换"基础"和"进阶"
-- 右上角放大镜可以全文搜索（支持中文）
-- 右上角太阳/月亮图标切换深浅色
+- 📖 **5 章**，每章 1500-3000 字
+- ⏱ **3 小时**读完，1 个周末上手
+- 🛠 **每章都有可直接 copy 的代码**，不写一行废话
+- 🎯 **目标**：读完你能独立把一个真实后端服务装进容器并跑在生产
+
+## 你会学到什么
+
+```mermaid
+flowchart LR
+    A[第 1 章<br/>为什么需要 Docker] --> B[第 2 章<br/>跑起第一个容器]
+    B --> C[第 3 章<br/>Compose 编排]
+    C --> D[第 4 章<br/>上生产]
+    D --> E((你会装容器))
+    style E fill:#5b6abf,color:#fff
+```
+
+## 适合谁读
+
+| 你是 | 这本书 |
+|------|--------|
+| ✅ 写过几年代码的后端工程师 | 完美匹配 |
+| ✅ 部署过应用但只是 `pm2 start` 级别 | 完美匹配 |
+| ✅ 听过 Docker 但没系统学过 | 完美匹配 |
+| ⚠️ 完全没碰过 Linux 命令行 | 建议先补 Bash 基础 |
+| ❌ 已经在生产用了几年 K8s | 你不是目标读者 |
+
+## 用什么环境跟着学
+
+!!! tip "推荐"
+    - **macOS** 或 **Linux** 桌面（Windows 也行，用 WSL2）
+    - 装一个 [Docker Desktop](https://www.docker.com/products/docker-desktop/) 或 [OrbStack](https://orbstack.dev/)（macOS 上 OrbStack 更快）
+    - 一个能用的终端（iTerm2、Warp 都行）
+
+!!! warning "国内网络注意"
+    Docker 镜像默认从 Docker Hub 拉，国内可能慢或失败。
+    第 2 章会教你配镜像加速器。
 
 ## 开始阅读
 
-!!! tip "建议"
-    第一次读建议按章节顺序，已有基础可以直接跳到对应主题。
-
-[开始第 1 章 →](part-1/chapter-01.md){ .md-button .md-button--primary }
+[👉 从第 1 章开始](part-1/chapter-01.md){ .md-button .md-button--primary }
+&nbsp;&nbsp;
+[🤔 跳到生产实战](part-2/chapter-04.md){ .md-button }
