@@ -1,5 +1,26 @@
+import { readdirSync, readFileSync } from 'node:fs'
+import { basename, join } from 'node:path'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
+
+// 自动从 srcDir（docs/）扫描 .md 生成 sidebar。
+// 每条用文件 H1 作为标题，文件名作为链接。
+// 新增 docs/chapter-NN.md 后重新 build 即可，**无需修改本文件**。
+function autoSidebar() {
+  const srcDir = 'docs'
+  return readdirSync(srcDir)
+    .filter((f) => f.endsWith('.md') && f !== 'index.md')
+    .sort()
+    .map((f) => {
+      const name = basename(f, '.md')
+      const content = readFileSync(join(srcDir, f), 'utf8')
+      const h1 = content.match(/^#\s+(.+)$/m)
+      return {
+        text: h1 ? h1[1].trim() : name,
+        link: '/' + name,
+      }
+    })
+}
 
 // 站点基础信息
 export default withMermaid(
@@ -42,10 +63,11 @@ export default withMermaid(
         },
       ],
 
-      // 侧栏：VitePress 默认会自动从 srcDir 扫描所有 .md，
-      // 用每个文件的 H1 作为标题，路径作为链接。
-      // 这里不写 sidebar，让新加的 chapter-N.md 自动出现在侧栏。
-      // 如果未来需要分组（如"入门"/"实战"），可以再加显式配置。
+      // 侧栏：所有页面共享同一份侧栏。条目由 autoSidebar() 在 build 时
+      // 扫 docs/*.md 自动生成。新加 chapter-NN.md 后重新 build 即可。
+      sidebar: {
+        '/': autoSidebar(),
+      },
 
       // 内置搜索（MiniSearch，支持中文）
       search: {
