@@ -3,24 +3,49 @@ import { basename, join } from 'node:path'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
-// 自动从 srcDir（docs/）扫描 .md 生成 sidebar。
-// 每条用文件 H1 作为标题，文件名作为链接。
-// 新增 docs/chapter-NN.md 后重新 build 即可，**无需修改本文件**。
-function autoSidebar() {
-  const srcDir = 'docs'
-  return readdirSync(srcDir)
+// 扫描 docs/{book}/ 下的 .md 生成单本书的 sidebar 条目。
+// 每条用 H1 作为标题，文件名作为链接。
+function bookSidebar(book: string) {
+  const bookDir = `docs/${book}`
+  return readdirSync(bookDir)
     .filter((f) => f.endsWith('.md') && f !== 'index.md')
     .sort()
     .map((f) => {
       const name = basename(f, '.md')
-      const content = readFileSync(join(srcDir, f), 'utf8')
+      const content = readFileSync(join(bookDir, f), 'utf8')
       const h1 = content.match(/^#\s+(.+)$/m)
       return {
         text: h1 ? h1[1].trim() : name,
-        link: '/' + name,
+        link: `/${book}/${name}`,
       }
     })
 }
+
+// 读取每本书的 index.md，提取 `title:` frontmatter 作为导航显示名。
+// 没写 frontmatter 就用目录名。
+function bookLabel(book: string): string {
+  try {
+    const txt = readFileSync(`docs/${book}/index.md`, 'utf8')
+    const m = txt.match(/^title:\s*(.+)$/m)
+    if (m) return m[1].trim().replace(/^['"]|['"]$/g, '')
+  } catch {}
+  return book
+}
+
+// 自动发现 docs/ 下的所有子目录作为一本书。
+// 新增 docs/bookN/ 子目录 + 在该目录下放 index.md，无需改本文件即可出现在导航/侧栏。
+function discoverBooks(): string[] {
+  return readdirSync('docs', { withFileTypes: true })
+    .filter((d) => d.isDirectory() && !d.name.startsWith('.'))
+    .map((d) => d.name)
+    .sort()
+}
+
+const books = discoverBooks()
+const bookNavItems = books.map((book) => ({
+  text: bookLabel(book),
+  link: `/${book}/`,
+}))
 
 // 站点基础信息
 export default withMermaid(
@@ -34,20 +59,23 @@ export default withMermaid(
     base: '/book/',
 
     // SEO
-    title: 'Docker 极简手册',
-    description: '写给后端工程师的容器实战 —— 从一条命令到生产部署',
+    title: '书架',
+    description: '写给工程师的电子书集合',
     lang: 'zh-CN',
     lastUpdated: true,
 
     // VitePress 主题配置
     themeConfig: {
       // 站点 logo 文字（无图就用纯文字）
-      siteTitle: 'Docker 极简手册',
+      siteTitle: '书架',
 
       // 顶部导航
       nav: [
-        { text: '首页', link: '/' },
-        { text: '关于', link: '/about' },
+        { text: '书架', link: '/' },
+        {
+          text: '书籍',
+          items: bookNavItems,
+        },
         {
           text: '在线阅读',
           items: [
@@ -63,18 +91,24 @@ export default withMermaid(
         },
       ],
 
-      // 侧栏：所有页面共享同一份侧栏。条目由 autoSidebar() 在 build 时
-      // 扫 docs/*.md 自动生成。新加 chapter-NN.md 后重新 build 即可。
-      sidebar: {
-        '/': autoSidebar(),
-      },
+      // 侧栏：每本书自己的侧栏。
+      // 在某本书内（路径以 /bookN/ 开头）时显示该书的章节列表。
+      // 根（/）不显示侧栏（书架首页不需要）。
+      sidebar: Object.fromEntries(
+        books.map((book) => [
+          `/${book}/`,
+          [
+            { text: `${bookLabel(book)} · 首页`, link: `/${book}/` },
+            ...bookSidebar(book),
+          ],
+        ])
+      ),
 
       // 内置搜索（MiniSearch，支持中文）
       search: {
         provider: 'local',
         options: {
           miniSearch: {
-            // 中文分词：按字符切（VitePress 默认对 CJK 不友好，手动配置）
             tokenize: (text: string) => text.split(/\s+/),
           },
         },
@@ -89,10 +123,10 @@ export default withMermaid(
         copyright: 'Copyright © 2026 hello28256',
       },
 
-      // 右上角图标（GitHub 链接）
+      // 右上角图标
       socialLinks: [{ icon: 'github', link: 'https://github.com/hello28256/book' }],
 
-      // 编辑本页（VitePress 1.x 自动从 git 推断仓库，配置后启用）
+      // 编辑本页
       editLink: {
         pattern: 'https://github.com/hello28256/book/edit/main/docs/:path',
         text: '在 GitHub 上编辑此页',
@@ -101,9 +135,7 @@ export default withMermaid(
 
     // Markdown 配置
     markdown: {
-      // 代码块行号
       lineNumbers: true,
-      // 自定义容器的中文标题
       container: {
         tipLabel: '提示',
         warningLabel: '警告',
@@ -113,12 +145,12 @@ export default withMermaid(
       },
     },
 
-    // 死链检查：忽略 localhost 链接（chapter-02 里的 docker run 演示用）
+    // 死链检查：忽略 localhost 链接
     ignoreDeadLinks: [
       /^https?:\/\/localhost(:\d+)?/,
     ],
 
-    // Mermaid 配置（vitepress-plugin-mermaid）
+    // Mermaid 配置
     mermaid: {
       theme: 'default',
     },
