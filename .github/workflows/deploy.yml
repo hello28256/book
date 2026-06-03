@@ -30,14 +30,23 @@ jobs:
       - name: 配置 Node.js
         uses: actions/setup-node@v4
         with:
-          # 锁版本而非 "20.x" —— CI 默认拿最新，可能引入意外回归
-          node-version: "20"
-          cache: "pnpm"
+          # 锁 22 而非 20 —— GitHub 已在 deprecate Node 20 runner，
+          # Node 22 LTS 稳定且 VitePress 1.6 兼容
+          node-version: "22"
 
-      - name: 配置 pnpm
-        uses: pnpm/action-setup@v4
+      - name: 启用 pnpm（通过 corepack）
+        run: corepack enable pnpm
+        # package.json 已声明 "packageManager": "pnpm@9.15.0"，
+        # corepack 会自动下载对应版本。比 pnpm/action-setup@v4 更稳：
+        # 避免 Node 20 runner 上 action setup 偶发 PATH 不生效的坑。
+
+      - name: 缓存 pnpm store
+        uses: actions/cache@v4
         with:
-          version: 9
+          path: ~/.local/share/pnpm/store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
