@@ -1,7 +1,20 @@
 <script setup lang="ts">
 // 每次 docs:build 之前，scripts/gen-commits.mjs 会跑 git log
-// 把最近 10 条提交写成这个 JSON。
+// 把最近 50 条提交写成这个 JSON，组件做分页。
+import { computed, ref } from 'vue'
 import commits from '../data/commits.json'
+
+const PAGE_SIZE = 10
+const page = ref(1)
+
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(commits.length / PAGE_SIZE))
+)
+
+const paged = computed(() => {
+  const start = (page.value - 1) * PAGE_SIZE
+  return commits.slice(start, start + PAGE_SIZE)
+})
 
 const fmt = (iso: string) => {
   const d = new Date(iso)
@@ -18,8 +31,9 @@ const fmt = (iso: string) => {
     <p class="last-update">
       最后提交：<strong>{{ fmt(commits[0].date) }}</strong> · {{ commits[0].message }}
     </p>
+
     <ol class="commit-list">
-      <li v-for="c in commits" :key="c.sha">
+      <li v-for="c in paged" :key="c.sha">
         <time :datetime="c.date">{{ fmt(c.date) }}</time>
         <a
           class="msg"
@@ -32,6 +46,36 @@ const fmt = (iso: string) => {
         <code class="sha">{{ c.short }}</code>
       </li>
     </ol>
+
+    <nav v-if="totalPages > 1" class="pagination">
+      <button
+        class="page-btn"
+        :disabled="page === 1"
+        @click="page--"
+        aria-label="上一页"
+      >
+        ← 上一页
+      </button>
+      <span class="page-info">第 {{ page }} / {{ totalPages }} 页</span>
+      <button
+        class="page-btn"
+        :disabled="page === totalPages"
+        @click="page++"
+        aria-label="下一页"
+      >
+        下一页 →
+      </button>
+    </nav>
+
+    <p v-if="totalPages > 1" class="all-link">
+      <a
+        href="https://github.com/hello28256/book/commits/main"
+        target="_blank"
+        rel="noopener"
+      >
+        在 GitHub 上查看全部提交 →
+      </a>
+    </p>
   </section>
 </template>
 
@@ -106,12 +150,67 @@ const fmt = (iso: string) => {
   border-radius: 4px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.page-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-default-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  font-variant-numeric: tabular-nums;
+  min-width: 90px;
+  text-align: center;
+}
+
+.all-link {
+  text-align: center;
+  margin: 16px 0 0;
+  font-size: 13px;
+}
+
+.all-link a {
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+}
+
+.all-link a:hover {
+  color: var(--vp-c-brand-1);
+}
+
 @media (max-width: 640px) {
   .commit-list li {
     flex-wrap: wrap;
   }
   .commit-list .sha {
     margin-left: 116px;
+  }
+  .pagination {
+    flex-wrap: wrap;
   }
 }
 </style>

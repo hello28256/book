@@ -10,7 +10,8 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
 const OUT = join(ROOT, 'docs/.vitepress/data/commits.json')
-const LIMIT = 10
+// 50 条 = 5 页（每页 10 条），够用几年了。要更多就改这个数 + 组件 PAGE_SIZE。
+const LIMIT = 50
 
 // 用 \x1f (Unit Separator) 当字段分隔符：标题里几乎不会出现的字符。
 // 避免标题里的 | 或空格干扰 CSV/空格分隔。
