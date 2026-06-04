@@ -58,6 +58,10 @@ export default withMermaid(
     // GitHub Pages 子路径，必须以 / 开头和结尾
     base: '/book/',
 
+    // 去掉 URL 里的 .html 后缀，访问 /foo/ 而不是 /foo.html。
+    // GitHub Pages 原生支持目录 + index.html 结构，无需额外配置。
+    cleanUrls: true,
+
     // SEO
     title: '书架',
     description: '写给工程师的电子书集合',
