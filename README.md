@@ -1,6 +1,6 @@
 # 书架
 
-写给工程师的电子书集合。
+我的阅读记录。
 
 [![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook-00c853)](https://hello28256.github.io/book/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/正文-CC%20BY--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-sa/4.0/)
@@ -11,7 +11,7 @@
 
 ## 关于
 
-每本书是一个独立的子项目 —— 新增 `docs/<book>/` 子目录即可出现，导航/侧栏自动接入。
+读过的书，抄过的句子，想过的想法。每本书是一个独立子目录，新增 `docs/<book>/` 即可在导航/侧栏出现，无需改配置。
 
 ## 本地预览
 

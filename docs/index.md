@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: 书架
-  text: 写给工程师的电子书集合
-  tagline: 把读过的书、写的笔记、踩过的坑，都放在一个安静的角落。
+  text: 我的阅读记录
+  tagline: 读过的书，抄过的句子，想过的想法。
   actions:
     - theme: brand
       text: 进入 1001Reading
