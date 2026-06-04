@@ -20,3 +20,9 @@ features:
     link: /1001Reading/
     linkText: 开始阅读
 ---
+
+<script setup>
+import RecentCommits from './.vitepress/components/RecentCommits.vue'
+</script>
+
+<RecentCommits />

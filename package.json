@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:gen-commits": "node scripts/gen-commits.mjs",
+    "docs:build": "pnpm run docs:gen-commits && vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {

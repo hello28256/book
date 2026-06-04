@@ -7,6 +7,8 @@ docs/.vitepress/cache/
 docs/.vitepress/.temp/
 # vitepress build 偶尔会把 dist/ 漏在仓库根目录（应为 docs/.vitepress/dist/）
 .vitepress/dist/
+# docs:gen-commits 生成的提交记录（每次 build 重新生成，不入仓）
+docs/.vitepress/data/
 
 # Python（保留 .env 警告）
 __pycache__/
