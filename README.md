@@ -1,6 +1,6 @@
-# 我的书
+# 书架
 
-> 用 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) 构建的一本书。
+写给工程师的电子书集合。
 
 [![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook-00c853)](https://hello28256.github.io/book/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/正文-CC%20BY--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-sa/4.0/)
@@ -9,12 +9,9 @@
 
 线上阅读：<https://hello28256.github.io/book/>
 
-## 关于这本书
+## 关于
 
-- 📖 **5 章**，每章 1500-3000 字
-- ⏱ **3 小时**读完，1 个周末上手
-- 🛠 **每章都有可直接 copy 的代码**
-- 🎯 **目标**：读完你能独立把一个真实后端服务装进容器并跑在生产
+每本书是一个独立的子项目 —— 新增 `docs/<book>/` 子目录即可出现，导航/侧栏自动接入。
 
 ## 本地预览
 
@@ -44,36 +41,35 @@ book/
 ├── pnpm-lock.yaml              # 锁版本
 ├── docs/                       # VitePress srcDir
 │   ├── .vitepress/
-│   │   ├── config.ts           # 站点配置（侧栏、导航、主题）
-│   │   └── theme/
-│   │       ├── index.ts        # 主题入口
-│   │       └── custom.css      # 品牌色（绿 #00c853）
-│   ├── index.md                # 首页
-│   ├── about.md                # 关于
-│   ├── chapter-01.md           # 第 1 章
-│   ├── chapter-02.md           # 第 2 章
-│   ├── chapter-03.md           # 第 3 章
-│   └── chapter-04.md           # 第 4 章
+│   │   └── config.ts           # 站点配置，自动扫描 docs/ 子目录作为一本书
+│   ├── index.md                # 书架首页
+│   └── 1001Reading/            # 当前唯一的书
+│       ├── index.md            # 书首页
+│       └── 001-015.md          # 15 篇笔记（中文文件名）
+├── .markdownlint.json          # markdownlint 配置
 └── .github/workflows/
     └── deploy.yml              # GitHub Actions 自动部署
 ```
 
+## 新增一本书
+
+`docs/.vitepress/config.ts` 的 `discoverBooks()` 会自动扫描 `docs/` 下所有子目录作为一本书，侧栏按文件名排序，从 H1 提取章节标题。
+
+1. 在 `docs/` 下新建子目录，例如 `docs/MyBook/`
+2. 写 `docs/MyBook/index.md`，带 `title:` frontmatter（书首页标题）
+3. 把章节 `.md` 放进 `docs/MyBook/`，每篇用一个 H1 作为标题
+4. `pnpm docs:dev` 本地预览
+5. git push 自动发布
+
 ## 部署
 
-推送到 `main` 分支会自动触发 GitHub Actions：
+推送到 `main` 分支自动触发 GitHub Actions：
 
 1. checkout → Node 22 → corepack pnpm → `pnpm install`
 2. `pnpm run docs:build` 生成 `docs/.vitepress/dist/`
 3. 上传 dist 到 Pages artifact → 部署
 
 仓库 **Settings → Pages → Source** 需要选 **GitHub Actions**。
-
-## 写新章节
-
-1. 在 `docs/` 下新建 Markdown 文件
-2. 在 `docs/.vitepress/config.ts` 的 `sidebar` 里加入索引
-3. `pnpm docs:dev` 本地预览
-4. git push 自动发布
 
 ## 许可
 
