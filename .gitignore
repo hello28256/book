@@ -5,6 +5,8 @@ site/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
 docs/.vitepress/.temp/
+# vitepress build 偶尔会把 dist/ 漏在仓库根目录（应为 docs/.vitepress/dist/）
+.vitepress/dist/
 
 # Python（保留 .env 警告）
 __pycache__/
