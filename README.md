@@ -53,7 +53,8 @@ book/
 
 ## 新增一本书
 
-`docs/.vitepress/config.ts` 的 `discoverBooks()` 会自动扫描 `docs/` 下所有子目录作为一本书，侧栏按文件名排序，从 H1 提取章节标题。
+`docs/.vitepress/config.ts` 的 `discoverBooks()` 会自动扫描
+`docs/` 下所有子目录作为一本书，侧栏按文件名排序，从 H1 提取章节标题。
 
 1. 在 `docs/` 下新建子目录，例如 `docs/MyBook/`
 2. 写 `docs/MyBook/index.md`，带 `title:` frontmatter（书首页标题）
