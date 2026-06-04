@@ -147,7 +147,7 @@ export default withMermaid(
 
     // 死链检查：忽略 localhost 链接
     ignoreDeadLinks: [
-      /^https?:\/\/localhost(:\d+)?/,
+      /^https?:\/\/localhost(:\d+)?\/?/,
     ],
 
     // Mermaid 配置
