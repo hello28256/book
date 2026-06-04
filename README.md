@@ -2,16 +2,16 @@
 
 我的阅读记录。
 
-[![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook-00c853)](https://hello28256.github.io/book/)
+[![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook%2F1001Reading-00c853)](https://hello28256.github.io/book/1001Reading/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/正文-CC%20BY--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![License: MIT](https://img.shields.io/badge/代码-MIT-blue)](https://opensource.org/licenses/MIT)
 [![Built with VitePress](https://img.shields.io/badge/Built_with-VitePress-00c853)](https://vitepress.dev/)
 
-线上阅读：<https://hello28256.github.io/book/>
+线上阅读：<https://hello28256.github.io/book/1001Reading/>
 
 ## 关于
 
-读过的书，抄过的句子，想过的想法。每本书是一个独立子目录，新增 `docs/<book>/` 即可在导航/侧栏出现，无需改配置。
+读过的书，抄过的句子，想过的想法。每本书是一个独立子目录。
 
 ## 本地预览
 
@@ -39,14 +39,17 @@ pnpm docs:preview
 book/
 ├── package.json                # pnpm 依赖 + scripts
 ├── pnpm-lock.yaml              # 锁版本
+├── .markdownlint.json          # markdownlint 配置
 ├── docs/                       # VitePress srcDir
 │   ├── .vitepress/
-│   │   └── config.ts           # 站点配置，自动扫描 docs/ 子目录作为一本书
-│   ├── index.md                # 书架首页
+│   │   ├── config.ts           # 站点配置，自动扫描 docs/ 子目录作为一本书
+│   │   └── theme/
+│   │       ├── index.ts        # 主题入口
+│   │       └── custom.css      # 自定义样式
+│   ├── index.md                # 书架首页（home layout）
 │   └── 1001Reading/            # 当前唯一的书
 │       ├── index.md            # 书首页
 │       └── 001-015.md          # 15 篇笔记（中文文件名）
-├── .markdownlint.json          # markdownlint 配置
 └── .github/workflows/
     └── deploy.yml              # GitHub Actions 自动部署
 ```
@@ -54,11 +57,11 @@ book/
 ## 新增一本书
 
 `docs/.vitepress/config.ts` 的 `discoverBooks()` 会自动扫描
-`docs/` 下所有子目录作为一本书，侧栏按文件名排序，从 H1 提取章节标题。
+`docs/` 下所有子目录作为一本书，侧栏从 H1 提取章节标题，按文件名排序。
 
 1. 在 `docs/` 下新建子目录，例如 `docs/MyBook/`
-2. 写 `docs/MyBook/index.md`，带 `title:` frontmatter（书首页标题）
-3. 把章节 `.md` 放进 `docs/MyBook/`，每篇用一个 H1 作为标题
+2. 写 `docs/MyBook/index.md`，带 `title:` frontmatter（书在导航中的显示名）
+3. 把章节 `.md` 放进 `docs/MyBook/`，**每篇用一个 H1 作为标题**（侧栏会从这里取）
 4. `pnpm docs:dev` 本地预览
 5. git push 自动发布
 

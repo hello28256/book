@@ -64,7 +64,7 @@ export default withMermaid(
 
     // SEO
     title: '书架',
-    description: '写给工程师的电子书集合',
+    description: '我的阅读记录',
     lang: 'zh-CN',
     lastUpdated: true,
 
