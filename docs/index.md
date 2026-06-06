@@ -4,7 +4,7 @@ layout: home
 hero:
   name: 书架
   text: 我的阅读记录
-  tagline: 读过的书，抄过的句子，想过的想法。
+  tagline: 读书、思考与成长，并非为了从此不再经历挫折与痛苦，而是为了当它们来临时，能够坦然面对。因为我明白，它们会来，也终将离去。
   actions:
     - theme: brand
       text: 进入 1001Reading
