@@ -27,7 +27,10 @@
  * 注意：.container 不能再扩到 1280px——VPFeatures 的 .container
  * 是 1152px，扩了之后两个 container 居中后左缘不一致，
  * 视觉上 hero 文字和 feature 卡片左边对不齐。
- * 保持 1152px 后，50 字 tagline (≈1200px) 刚好折成 2 行。 */
+ * 保持 1152px 后，50 字 tagline (≈1200px) 刚好折成 2 行。
+ * 颜色用品牌色变量，暗色模式自动适配；italic 是斜体。 */
 .VPHero:not(.has-image) .tagline {
   max-width: 100%;
+  color: var(--vp-c-brand-1);
+  font-style: italic;
 }
