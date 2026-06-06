@@ -21,3 +21,13 @@
 .VPHero:not(.has-image) .main {
   width: 100%;
 }
+
+/* 配套调整：.tagline max-width 在 ≥640px 之后锁死 576px，
+ * 50 字文案会折成 3 行。撑满主区后还要扩容器到 1280px，
+ * desktop 1280+ 屏能稳稳 1 行。 */
+.VPHero:not(.has-image) .container {
+  max-width: 1280px;
+}
+.VPHero:not(.has-image) .tagline {
+  max-width: 100%;
+}
