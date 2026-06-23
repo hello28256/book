@@ -27,18 +27,22 @@ jobs:
         with:
           fetch-depth: 0  # 完整历史，便于 lastUpdated 插件使用
 
+      - name: 装 pnpm
+        # setup-node@v5 的 cache: pnpm 只会缓存 pnpm store，
+        # 不会自动把 pnpm 加到 PATH。之前依赖 corepack enable
+        # 但 setup-node@v5 在 corepack 之前重置过 PATH，pnpm 仍
+        # 找不到。改用 pnpm/action-setup 显式装 pnpm 到 PATH。
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: 配置 Node.js
         uses: actions/setup-node@v5
         with:
           # 锁 22 而非 20 —— GitHub 已在 deprecate Node 20 runner，
           # Node 22 LTS 稳定且 VitePress 1.6 兼容
           node-version: "22"
-          # setup-node@v5 接管包管理器：自动读 package.json 的
-          # "packageManager": "pnpm@9.15.0" 装 pnpm 并加到 PATH，
-          # 同时自动缓存 pnpm store。
-          # 不再用独立的 corepack + actions/cache 步骤：
-          # 那样 setup-node 不知道 pnpm 在哪，下一步就报
-          # "Unable to locate executable file: pnpm"。
+          # 缓存 pnpm store (依赖上面 pnpm/action-setup 先把 pnpm 装上)
           cache: pnpm
 
       - name: 安装依赖
