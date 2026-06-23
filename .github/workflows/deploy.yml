@@ -29,12 +29,11 @@ jobs:
 
       - name: 装 pnpm
         # setup-node@v5 的 cache: pnpm 只会缓存 pnpm store，
-        # 不会自动把 pnpm 加到 PATH。之前依赖 corepack enable
-        # 但 setup-node@v5 在 corepack 之前重置过 PATH，pnpm 仍
-        # 找不到。改用 pnpm/action-setup 显式装 pnpm 到 PATH。
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+        # 不会自动把 pnpm 加到 PATH。改用 pnpm/action-setup 显式装。
+        # v6: 修 Node 20 deprecation, 内部跑在 Node 22+。
+        # 不传 version: action-setup 会自动读 package.json 的
+        # "packageManager": "pnpm@9.15.0", 传了反而会冲突。
+        uses: pnpm/action-setup@v6
 
       - name: 配置 Node.js
         uses: actions/setup-node@v5
