@@ -46,3 +46,19 @@
 .dark .vp-doc strong {
   color: #ff6b6b;
 }
+
+/* 文章正文里的图片默认居中。
+ * Markdown 里的 ![](url) 和 <img> 都会被 VitePress 用 <p> 包裹，
+ * 所以选择器 .vp-doc p > img 同时覆盖两种写法。
+ * - display:block: 脱离 inline 行为，margin 居中才能生效
+ * - margin:0 auto: 水平居中
+ * - max-width:100%: 防止用户传的图比正文容器宽而被裁/撑破布局
+ * - height:auto: 保持原始宽高比，避免被压扁
+ * 已在 .md 里手写 width/height/style 的图片会保留它们自己的尺寸，
+ * 这里只补\"水平居中\"这一行为，不会改变图片显示大小。 */
+.vp-doc p > img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
