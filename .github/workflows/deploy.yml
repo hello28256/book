@@ -23,12 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # 完整历史，便于 lastUpdated 插件使用
 
       - name: 配置 Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           # 锁 22 而非 20 —— GitHub 已在 deprecate Node 20 runner，
           # Node 22 LTS 稳定且 VitePress 1.6 兼容
@@ -41,7 +41,7 @@ jobs:
         # 避免 Node 20 runner 上 action setup 偶发 PATH 不生效的坑。
 
       - name: 缓存 pnpm store
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.local/share/pnpm/store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
