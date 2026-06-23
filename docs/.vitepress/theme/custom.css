@@ -34,3 +34,15 @@
   color: var(--vp-c-brand-1);
   font-style: italic;
 }
+
+/* 文章正文的加粗文字变红。
+ * 作用范围只限 .vp-doc (VitePress 给 Markdown 正文容器加的 class)，
+ * 不会污染侧栏、导航等 UI 里的 <strong>。
+ * 明暗模式分别给一个适合当前背景的红色，避免暗色下刺眼。 */
+.vp-doc strong {
+  color: #d32f2f;
+  font-weight: 700;
+}
+.dark .vp-doc strong {
+  color: #ff6b6b;
+}
