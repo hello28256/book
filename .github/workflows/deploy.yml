@@ -51,6 +51,14 @@ jobs:
         run: pnpm run docs:build
         # 产物路径：docs/.vitepress/dist
 
+      - name: 写入 version.json
+        # 让前端能感知"有新版本部署"。时间戳来自 GHA 自身时钟，
+        # 比 git log 的最后提交时间更准（rebase / force push 后也能反映新版本）。
+        # 路径放在 dist 根目录，部署后访问 /book/version.json 即可。
+        run: |
+          TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          printf '{"version":"%s"}\n' "$TS" > docs/.vitepress/dist/version.json
+
       - name: 上传 Pages 工件
         uses: actions/upload-pages-artifact@v3
         with:
