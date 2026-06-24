@@ -72,6 +72,12 @@ export default withMermaid(
     // 显式声明而不是依赖 VitePress 默认查找,
     // 因为站点部署在 /book/ 子路径,显式声明最稳。
     head: [
+      // HTML 缓存控制：让浏览器和中间代理更倾向于重新验证，避免新增笔记后看不到。
+      // 注意：meta http-equiv 多数现代浏览器会忽略；真正生效依赖服务器响应头。
+      // 这里作为软信号，配合 GitHub Pages 默认 max-age=600，能在大多数情况下更快刷新。
+      ['meta', { 'http-equiv': 'Cache-Control', content: 'no-cache, no-store, must-revalidate' }],
+      ['meta', { 'http-equiv': 'Pragma', content: 'no-cache' }],
+      ['meta', { 'http-equiv': 'Expires', content: '0' }],
       ['link', { rel: 'icon', type: 'image/png', href: '/book/favicon.png' }],
       ['link', { rel: 'apple-touch-icon', href: '/book/apple-touch-icon.png' }],
     ],
