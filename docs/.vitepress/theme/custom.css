@@ -52,7 +52,7 @@
  * 所以选择器 .vp-doc p > img 同时覆盖两种写法。
  * - display:block: 脱离 inline 行为，margin 居中才能生效
  * - margin:0 auto: 水平居中
- * - max-width:360px: 大图限制最大宽度,撑到上限就停
+ * - max-width:200px: 大图限制最大宽度,撑到上限就停
  * - width:100%: 小图自动拉大、占满到 max-width 上限
  * - height:auto: 保持原始宽高比,避免被压扁
  * 已在 .md 里手写 width/height/style 的图片会保留它们自己的尺寸,
@@ -60,7 +60,7 @@
 .vp-doc p > img {
   display: block;
   margin: 0 auto;
-  max-width: 360px;
+  max-width: 200px;
   width: 100%;
   height: auto;
 }
