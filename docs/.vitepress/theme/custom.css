@@ -52,15 +52,15 @@
  * 所以选择器 .vp-doc p > img 同时覆盖两种写法。
  * - display:block: 脱离 inline 行为，margin 居中才能生效
  * - margin:0 auto: 水平居中
- * - max-width:480px: 大图统一限制最大宽度,避免撑破布局/大小不一
- * - width:auto: 小图保持原尺寸,不强制放大
+ * - max-width:480px: 大图限制最大宽度,撑到上限就停
+ * - width:100%: 小图自动拉大、占满到 max-width 上限
  * - height:auto: 保持原始宽高比,避免被压扁
  * 已在 .md 里手写 width/height/style 的图片会保留它们自己的尺寸,
- * 这里只补\"水平居中 + 最大宽度\"。 */
+ * 这里只补\"水平居中 + 自适应大小\"。 */
 .vp-doc p > img {
   display: block;
   margin: 0 auto;
   max-width: 480px;
-  width: auto;
+  width: 100%;
   height: auto;
 }
