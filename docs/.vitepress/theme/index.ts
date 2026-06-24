@@ -8,8 +8,13 @@ import './custom.css'
 // + 覆盖 Layout，在 page-bottom 插槽里塞 RecentCommits。
 // 这样所有页面（首页、每本书的章节页）底部自动出现提交列表。
 //
-// VersionNotice 挂到 layout 外层；组件内部用 <Teleport to="body">
-// 把弹窗搬到 body 末尾，规避 VitePress 默认布局的 z-index/overflow 限制。
+// VersionNotice 也挂到 page-bottom 插槽（和 RecentCommits 一起）。
+// 组件内部用 <Teleport to="body"> 把弹窗搬到 body 末尾，
+// 规避 VitePress 默认布局的 z-index/overflow 限制。
+//
+// 注意：之前试过挂在 layout-top，结果 production build 把整个组件
+// 当 dead code 砍了——dist 里完全没有 VersionNotice 代码。
+// 原因不明（dev 模式正常），但挂回 page-bottom 就好。
 //
 // 写法来自 VitePress 官方文档：
 // https://vitepress.dev/guide/extending-default-theme#layout-slots
@@ -17,8 +22,10 @@ export default {
   extends: DefaultTheme,
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'page-bottom': () => h(RecentCommits),
-      'layout-top': () => h(VersionNotice),
+      'page-bottom': () => [
+        h(RecentCommits),
+        h(VersionNotice),
+      ],
     })
   },
 }
