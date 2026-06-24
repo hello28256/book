@@ -48,16 +48,19 @@
 }
 
 /* 文章正文里的图片默认居中 + 统一大小。
- * Markdown 里的 ![](url) 和 <img> 都会被 VitePress 用 <p> 包裹，
- * 所以选择器 .vp-doc p > img 同时覆盖两种写法。
- * - display:block: 脱离 inline 行为，margin 居中才能生效
+ * VitePress 渲染 Markdown 行为:
+ * - ![](url) 写法 → 自动包 <p><img></p>,命中 .vp-doc p > img
+ * - 手写 <img> 写法 → 不会包 p,直接渲染,要靠 .vp-doc img 抓
+ * 用组合选择器 .vp-doc p > img, .vp-doc img 同时覆盖两种写法。
+ * - display:block: 脱离 inline 行为,margin 居中才能生效
  * - margin:0 auto: 水平居中
  * - max-width:200px: 大图限制最大宽度,撑到上限就停
  * - width:100%: 小图自动拉大、占满到 max-width 上限
  * - height:auto: 保持原始宽高比,避免被压扁
  * 已在 .md 里手写 width/height/style 的图片会保留它们自己的尺寸,
  * 这里只补\"水平居中 + 自适应大小\"。 */
-.vp-doc p > img {
+.vp-doc p > img,
+.vp-doc img {
   display: block;
   margin: 0 auto;
   max-width: 200px;
