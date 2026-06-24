@@ -35,6 +35,14 @@
   font-style: italic;
 }
 
+/* 文章正文里的 blockquote 左边框变绿,和加粗色一致。
+ * 默认 VitePress 左边框是灰色,这里覆盖为品牌绿。
+ * - border-left: 原来的粗细(4px)和样式(solid)保留,只换颜色
+ * - background: 微调让绿色边框更协调(也可省略,保留默认) */
+.vp-doc blockquote {
+  border-left-color: var(--vp-c-brand-1);
+}
+
 /* 文章正文的加粗文字变绿。
  * 作用范围只限 .vp-doc (VitePress 给 Markdown 正文容器加的 class)，
  * 不会污染侧栏、导航等 UI 里的 <strong>。
