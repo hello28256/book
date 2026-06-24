@@ -16,7 +16,7 @@ hero:
 features:
   - icon: 📖
     title: 1001Reading
-    details: 31 篇阅读笔记。涵盖人生哲学、心理学、文学经典。
+    details: 34 篇阅读笔记。涵盖人生哲学、心理学、文学经典。
     link: /1001Reading/
     linkText: 开始阅读
 ---
