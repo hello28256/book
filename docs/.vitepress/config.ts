@@ -56,6 +56,36 @@ export default withMermaid(
       ['meta', { 'http-equiv': 'Expires', content: '0' }],
       ['link', { rel: 'icon', type: 'image/png', href: '/book/favicon.png' }],
       ['link', { rel: 'apple-touch-icon', href: '/book/apple-touch-icon.png' }],
+      // 缓存绕开：解决"新文章上线后浏览器看不到，要手动刷新"的问题。
+      // GitHub Pages 给 /book/ 设的 cache-control: max-age=600，CDN 也缓存。
+      // 思路：deploy.yml 写一个 version.json（部署时间戳），HTML 里跑这段：
+      //   1. fetch version.json（cache: no-cache 强制回源）
+      //   2. 对比 localStorage 里的旧版本
+      //   3. 不一致就把 URL 换成 <path>?v=<时间戳> 后 replace
+      //      → 新 URL 不在 CDN 旧缓存里 → 浏览器拉到的就是新 HTML → 立刻看到新文章
+      // 注意：脚本要 inline 同步写在 head，目的是"页面打开前就跳走"，
+      // 比 SPA 接管 URL 之前还早，避免闪一下旧页面。
+      ['script', {}, `
+;(function () {
+  try {
+    var LS_KEY = 'book-build-v'
+    fetch('/book/version.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : null })
+      .then(function (data) {
+        if (!data || !data.version) return
+        var remote = String(data.version)
+        var local = localStorage.getItem(LS_KEY)
+        if (local && local !== remote) {
+          var u = new URL(location.href)
+          u.searchParams.set('v', remote)
+          location.replace(u.toString())
+        }
+        localStorage.setItem(LS_KEY, remote)
+      })
+      .catch(function () { /* 网络失败 / 离线下次再试 */ })
+  } catch (e) { /* localStorage 被禁时静默 */ }
+})();
+`],
     ],
 
     // VitePress 主题配置
