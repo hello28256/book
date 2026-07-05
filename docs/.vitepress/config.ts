@@ -34,9 +34,12 @@ function bookLabel(book: string): string {
 
 // 自动发现 docs/ 下的所有子目录作为一本书。
 // 新增 docs/bookN/ 子目录 + 在该目录下放 index.md，无需改本文件即可出现在导航/侧栏。
+// 排除特殊目录：public（VitePress 静态资源约定）/ .vitepress（配置目录）
 function discoverBooks(): string[] {
   return readdirSync('docs', { withFileTypes: true })
-    .filter((d) => d.isDirectory() && !d.name.startsWith('.'))
+    .filter(
+      (d) => d.isDirectory() && !d.name.startsWith('.') && d.name !== 'public'
+    )
     .map((d) => d.name)
     .sort()
 }
