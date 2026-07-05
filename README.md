@@ -1,4 +1,4 @@
-# 书架
+# 阅读
 
 我的阅读记录。
 
@@ -52,7 +52,7 @@ book/
 │   │   └── theme/
 │   │       ├── index.ts                # 主题入口 + page-bottom 插槽
 │   │       └── custom.css              # 自定义样式 (品牌色/加粗红/图片居中)
-│   ├── index.md                        # 书架首页 (home layout)
+│   ├── index.md                        # 阅读首页 (home layout)
 │   ├── NNN标题.md                       # 38 篇笔记，平铺在根
 │   ├── public/                         # VitePress 静态资源 (favicon 等)
 │   └── 1001Reading/                    # 老路径重定向层（meta refresh）

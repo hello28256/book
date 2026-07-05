@@ -39,7 +39,7 @@ export default withMermaid(
     cleanUrls: true,
 
     // SEO
-    title: '书架',
+    title: '阅读',
     description: '我的阅读记录',
     lang: 'zh-CN',
     lastUpdated: true,
@@ -61,10 +61,10 @@ export default withMermaid(
     // VitePress 主题配置
     themeConfig: {
       // 站点 logo 文字（无图就用纯文字）
-      siteTitle: '书架',
+      siteTitle: '阅读',
 
       // 顶部导航
-      // 不放"书架"项 —— 左侧 siteTitle 已经显示"书架"，再放会重复。
+      // 不放"阅读"项 —— 左侧 siteTitle 已经显示"阅读"，再放会重复。
       // 不放"书籍"下拉 —— 笔记已平铺到 docs/ 根，侧栏就是全集。
       nav: [
         {
