@@ -2,16 +2,16 @@
 
 我的阅读记录。
 
-[![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook%2F1001Reading-00c853)](https://hello28256.github.io/book/1001Reading/)
+[![Online](https://img.shields.io/badge/📖_在线阅读-hello28256.github.io%2Fbook-00c853)](https://hello28256.github.io/book/)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/正文-CC%20BY--SA%204.0-lightgrey)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![License: MIT](https://img.shields.io/badge/代码-MIT-blue)](https://opensource.org/licenses/MIT)
 [![Built with VitePress](https://img.shields.io/badge/Built_with-VitePress-00c853)](https://vitepress.dev/)
 
-线上阅读：<https://hello28256.github.io/book/1001Reading/>
+线上阅读：<https://hello28256.github.io/book/>
 
 ## 关于
 
-读过的书，抄过的句子，想过的想法。每本书是一个独立子目录。
+读过的书，抄过的句子，想过的想法。所有笔记直接放在 `docs/` 根，未来笔记多到几十、上百篇时，再拆成 `book2/` `book3/` 子目录。
 
 ## 本地预览
 
@@ -44,7 +44,7 @@ book/
 │   └── gen-commits.mjs                 # build 前跑, git log → commits.json
 ├── docs/                               # VitePress srcDir
 │   ├── .vitepress/
-│   │   ├── config.ts                   # 站点配置, 自动扫描 docs/ 子目录作为一本书
+│   │   ├── config.ts                   # 站点配置，rootSidebar() 平铺扫描 docs/*.md
 │   │   ├── components/
 │   │   │   └── RecentCommits.vue       # 页面底部的提交列表组件
 │   │   ├── data/
@@ -53,23 +53,30 @@ book/
 │   │       ├── index.ts                # 主题入口 + page-bottom 插槽
 │   │       └── custom.css              # 自定义样式 (品牌色/加粗红/图片居中)
 │   ├── index.md                        # 书架首页 (home layout)
-│   └── 1001Reading/                    # 当前唯一的书
-│       ├── index.md                    # 书首页
-│       └── *.md                        # 31 篇笔记
+│   ├── NNN标题.md                       # 38 篇笔记，平铺在根
+│   ├── public/                         # VitePress 静态资源 (favicon 等)
+│   └── 1001Reading/                    # 老路径重定向层（meta refresh）
+│       └── NNN标题.md                   # 38 个 redirect 页面，老 URL 跳转
 └── .github/workflows/
     └── deploy.yml                      # GitHub Actions 自动部署
 ```
 
-## 新增一本书
+## URL 结构
 
-`docs/.vitepress/config.ts` 的 `discoverBooks()` 会自动扫描
-`docs/` 下所有子目录作为一本书，侧栏从 H1 提取章节标题，按文件名排序。
+所有笔记 URL 直接是 `/book/NNN标题`，不再带 `1001Reading/` 前缀。
 
-1. 在 `docs/` 下新建子目录，例如 `docs/MyBook/`
-2. 写 `docs/MyBook/index.md`，带 `title:` frontmatter（书在导航中的显示名）
-3. 把章节 `.md` 放进 `docs/MyBook/`，**每篇用一个 H1 作为标题**（侧栏会从这里取）
+老链接 `/book/1001Reading/NNN标题` 仍能访问 —— `docs/1001Reading/` 下放了一份
+对老 URL 的 redirect 页，浏览器通过 `<meta http-equiv="refresh">` 立即跳到新路径。
+
+## 新增一篇笔记
+
+1. 在 `docs/` 根创建 `NNN标题.md`（3 位编号 + 标题，例如 `039新笔记.md`）
+2. 第一行写 `# 标题` —— 侧栏会从这里取显示名
+3. 侧栏按文件名字典序自动排序，所以新笔记的编号决定它在侧栏的位置
 4. `pnpm docs:dev` 本地预览
 5. git push 自动发布
+
+> 如果以后笔记多到几十、上百篇，按主题拆 `docs/Reading2/` `docs/Reading3/` 子目录，再把 `rootSidebar` 改回多书扫描即可。
 
 ## 主题定制
 

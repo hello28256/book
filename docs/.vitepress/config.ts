@@ -3,52 +3,25 @@ import { basename, join } from 'node:path'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
-// 扫描 docs/{book}/ 下的 .md 生成单本书的 sidebar 条目。
+// 扫描 docs/ 根下的 .md 生成 sidebar 条目（平铺笔记）。
 // 每条用 H1 作为标题，文件名作为链接。
-function bookSidebar(book: string) {
-  const bookDir = `docs/${book}`
-  return readdirSync(bookDir)
+// 注意：只扫 docs/ 根一层 —— 2026-07 重构后所有笔记直接放在 docs/ 下，
+// 不再用 docs/bookN/ 子目录结构（参见 docs/1001Reading/ 重定向到根路径）。
+// 重构是为了让 URL 直接是 /book/001金句 而不是 /book/1001Reading/001金句。
+function rootSidebar() {
+  return readdirSync('docs')
     .filter((f) => f.endsWith('.md') && f !== 'index.md')
     .sort()
     .map((f) => {
       const name = basename(f, '.md')
-      const content = readFileSync(join(bookDir, f), 'utf8')
+      const content = readFileSync(join('docs', f), 'utf8')
       const h1 = content.match(/^#\s+(.+)$/m)
       return {
         text: h1 ? h1[1].trim() : name,
-        link: `/${book}/${name}`,
+        link: `/${name}`,
       }
     })
 }
-
-// 读取每本书的 index.md，提取 `title:` frontmatter 作为导航显示名。
-// 没写 frontmatter 就用目录名。
-function bookLabel(book: string): string {
-  try {
-    const txt = readFileSync(`docs/${book}/index.md`, 'utf8')
-    const m = txt.match(/^title:\s*(.+)$/m)
-    if (m) return m[1].trim().replace(/^['"]|['"]$/g, '')
-  } catch {}
-  return book
-}
-
-// 自动发现 docs/ 下的所有子目录作为一本书。
-// 新增 docs/bookN/ 子目录 + 在该目录下放 index.md，无需改本文件即可出现在导航/侧栏。
-// 排除特殊目录：public（VitePress 静态资源约定）/ .vitepress（配置目录）
-function discoverBooks(): string[] {
-  return readdirSync('docs', { withFileTypes: true })
-    .filter(
-      (d) => d.isDirectory() && !d.name.startsWith('.') && d.name !== 'public'
-    )
-    .map((d) => d.name)
-    .sort()
-}
-
-const books = discoverBooks()
-const bookNavItems = books.map((book) => ({
-  text: bookLabel(book),
-  link: `/${book}/`,
-}))
 
 // 站点基础信息
 export default withMermaid(
@@ -92,11 +65,8 @@ export default withMermaid(
 
       // 顶部导航
       // 不放"书架"项 —— 左侧 siteTitle 已经显示"书架"，再放会重复。
+      // 不放"书籍"下拉 —— 笔记已平铺到 docs/ 根，侧栏就是全集。
       nav: [
-        {
-          text: '书籍',
-          items: bookNavItems,
-        },
         {
           text: '在线阅读',
           items: [
@@ -112,18 +82,12 @@ export default withMermaid(
         },
       ],
 
-      // 侧栏：每本书自己的侧栏。
-      // 在某本书内（路径以 /bookN/ 开头）时显示该书的章节列表。
-      // 根（/）不显示侧栏（书架首页不需要）。
-      sidebar: Object.fromEntries(
-        books.map((book) => [
-          `/${book}/`,
-          [
-            { text: `${bookLabel(book)} · 首页`, link: `/${book}/` },
-            ...bookSidebar(book),
-          ],
-        ])
-      ),
+      // 侧栏：所有页面都显示笔记列表（平铺）。
+      // 包括首页 / (即 docs/index.md)，让侧栏随时可点。
+      sidebar: [
+        { text: '阅读笔记', link: '/' },
+        ...rootSidebar(),
+      ],
 
       // 内置搜索（MiniSearch，支持中文）
       search: {
