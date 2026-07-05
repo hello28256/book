@@ -91,8 +91,8 @@ export default withMermaid(
       siteTitle: '书架',
 
       // 顶部导航
+      // 不放"书架"项 —— 左侧 siteTitle 已经显示"书架"，再放会重复。
       nav: [
-        { text: '书架', link: '/' },
         {
           text: '书籍',
           items: bookNavItems,
