@@ -77,14 +77,19 @@
 }
 
 /* 顶部 Logo 文字 (siteTitle='阅读') 和右侧导航链接都改成品牌绿。
- * 用品牌色变量，明暗模式自动适配。
- * 只动 color，避免影响 layout / 字号 / 间距。 */
-.VPNavBarTitle .title,
-.VPNavBarMenuLink .text {
+ *
+ * 为什么用 .VPNavBar .VPNavBarTitle .title (三层) 而不只是 .VPNavBarTitle .title (两层)？
+ * VitePress 这些组件用 <style scoped>，编译后变成 .title[data-v-xxx]，
+ * 单类后代链 .VPNavBarTitle .title 的优先级是 (0,2,0)，跟自带的相等。
+ * 相等优先级下，后加载的赢，而 VitePress 的内置 style.css 在 custom.css 之后加载，
+ * 就会盖掉我们的色。祖先链加一层 .VPNavBar 把优先级提到 (0,3,0)，稳赢。
+ */
+.VPNavBar .VPNavBarTitle .title,
+.VPNavBar .VPNavBarMenuLink .text {
   color: var(--vp-c-brand-1);
 }
-/* hover 颜色升一档 (brand-2)，与 VitePress 自带交互一致 */
-.VPNavBarTitle:hover .title,
-.VPNavBarMenuLink:hover .text {
+/* hover 颜色升一档 (brand-2) */
+.VPNavBar .VPNavBarTitle:hover .title,
+.VPNavBar .VPNavBarMenuLink:hover .text {
   color: var(--vp-c-brand-2);
 }
