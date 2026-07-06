@@ -69,10 +69,14 @@ export default withMermaid(
       // localStorage 会被各种情况污染（手动清缓存、隐身模式、首次访问），
       // 一旦写入正确值就永远'觉得一致'，反而让用户看不到新 HTML。
       // URL 上有 ?v= 是 v1.6.4 之后的修复关键。
+      //
+      // v1.6.5 增强：fetch 加 ?_<随机数> 强制绕开 CDN/浏览器对 version.json 的
+      // 缓存（CDN key 是完整 URL，不同 query 视为不同资源）。否则旧版 fetch
+      // 返回旧 version，用户跳到旧 ?v=，老 HTML 自我循环。
       ['script', {}, `
 ;(function () {
   try {
-    fetch('/book/version.json', { cache: 'no-cache' })
+    fetch('/book/version.json?_=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null })
       .then(function (data) {
         if (!data || !data.version) return
