@@ -75,3 +75,16 @@
   width: 100%;
   height: auto;
 }
+
+/* 顶部 Logo 文字 (siteTitle='阅读') 和右侧导航链接都改成品牌绿。
+ * 用品牌色变量，明暗模式自动适配。
+ * 只动 color，避免影响 layout / 字号 / 间距。 */
+.VPNavBarTitle .title,
+.VPNavBarMenuLink .text {
+  color: var(--vp-c-brand-1);
+}
+/* hover 颜色升一档 (brand-2)，与 VitePress 自带交互一致 */
+.VPNavBarTitle:hover .title,
+.VPNavBarMenuLink:hover .text {
+  color: var(--vp-c-brand-2);
+}
