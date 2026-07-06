@@ -60,27 +60,29 @@ export default withMermaid(
       // GitHub Pages 给 /book/ 设的 cache-control: max-age=600，CDN 也缓存。
       // 思路：deploy.yml 写一个 version.json（部署时间戳），HTML 里跑这段：
       //   1. fetch version.json（cache: no-cache 强制回源）
-      //   2. 对比 localStorage 里的旧版本
-      //   3. 不一致就把 URL 换成 <path>?v=<时间戳> 后 replace
-      //      → 新 URL 不在 CDN 旧缓存里 → 浏览器拉到的就是新 HTML → 立刻看到新文章
-      // 注意：脚本要 inline 同步写在 head，目的是"页面打开前就跳走"，
-      // 比 SPA 接管 URL 之前还早，避免闪一下旧页面。
+      //   2. 取 URL 上的 ?v= 参数（缺则视作空字符串）
+      //   3. 比对：
+      //      - URL 没 ?v    → 跳到 ?v=<remote>  强制写版本号
+      //      - URL 有但旧   → 跳到 ?v=<remote>  部署后用户停留在旧 URL
+      //      - URL 一致     → 不动
+      // 用 URL 的 ?v 作真相源（不是 localStorage）——
+      // localStorage 会被各种情况污染（手动清缓存、隐身模式、首次访问），
+      // 一旦写入正确值就永远'觉得一致'，反而让用户看不到新 HTML。
+      // URL 上有 ?v= 是 v1.6.4 之后的修复关键。
       ['script', {}, `
 ;(function () {
   try {
-    var LS_KEY = 'book-build-v'
     fetch('/book/version.json', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null })
       .then(function (data) {
         if (!data || !data.version) return
         var remote = String(data.version)
-        var local = localStorage.getItem(LS_KEY)
-        if (local && local !== remote) {
-          var u = new URL(location.href)
+        var u = new URL(location.href)
+        var current = u.searchParams.get('v') || ''
+        if (current !== remote) {
           u.searchParams.set('v', remote)
           location.replace(u.toString())
         }
-        localStorage.setItem(LS_KEY, remote)
       })
       .catch(function () { /* 网络失败 / 离线下次再试 */ })
   } catch (e) { /* localStorage 被禁时静默 */ }
