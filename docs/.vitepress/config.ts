@@ -121,7 +121,7 @@ export default withMermaid(
       // 侧栏：所有页面都显示笔记列表（平铺）。
       // 包括首页 / (即 docs/index.md)，让侧栏随时可点。
       sidebar: [
-        { text: '阅读笔记', link: '/' },
+        { text: '首页', link: '/' },
         ...rootSidebar(),
       ],
 
