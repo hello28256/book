@@ -97,8 +97,8 @@
   color: var(--vp-c-brand-2);
 }
 
-/* 顶部 nav 文字统一放大到 20px。
- * 用户截图反馈默认 14px / 16px 偏小，看着累。
+/* 顶部 nav 文字统一放大到 15px。
+ * 默认 14px / 16px 偏小，看着累。
  *
  * 三种 nav 元素需要分别覆盖：
  * - Logo:       .VPNavBarTitle .title
@@ -112,7 +112,7 @@
 .VPNavBar .VPNavBarTitle .title,
 .VPNavBar .VPNavBarMenuLink,
 .VPNavBar .VPFlyout .text {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
