@@ -112,7 +112,7 @@
 .VPNavBar .VPNavBarTitle .title,
 .VPNavBar .VPNavBarMenuLink,
 .VPNavBar .VPFlyout .text {
-  font-size: 15px;
+  font-size: 18px;
 }
 
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
