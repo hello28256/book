@@ -12,11 +12,4 @@ hero:
     - theme: alt
       text: GitHub 仓库
       link: https://github.com/hello28256/book
-
-features:
-  - icon: 📖
-    title: 1001Reading
-    details: 38 篇阅读笔记。涵盖人生哲学、心理学、文学经典。按编号排序，左侧栏随时可点。
-    link: /001金句/
-    linkText: 从第一篇开始
 ---
