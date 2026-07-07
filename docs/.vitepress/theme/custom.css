@@ -99,11 +99,19 @@
 
 /* 顶部 nav 文字统一放大到 20px。
  * 用户截图反馈默认 14px / 16px 偏小，看着累。
- * 只动 Logo (.VPNavBarTitle) 和 nav 链接 (.VPNavBarMenuLink) 文字，
- * 不动 Search 输入框（输入框改 font-size 会撑大高度、破布局）。
- * 用 .VPNavBar 祖先链 (0,3,0) 压过 VitePress scoped 编译后的 .title[data-v-xxx] (0,2,0)。 */
+ *
+ * 三种 nav 元素需要分别覆盖：
+ * - Logo:       .VPNavBarTitle .title
+ * - 普通外链:   .VPNavBarMenuLink
+ * - 下拉 trigger: .VPFlyout .text （被 VPNavBarMenuGroup 包了一层，
+ *                                不是 VPNavBarMenuLink！）
+ *
+ * 祖先链 .VPNavBar 加一层 (0,3,0) 压过 VitePress scoped 编译后的
+ * .title[data-v-xxx] (0,2,0)。Search 输入框不在此列（动 font-size
+ * 会撑大高度、破布局）。 */
 .VPNavBar .VPNavBarTitle .title,
-.VPNavBar .VPNavBarMenuLink {
+.VPNavBar .VPNavBarMenuLink,
+.VPNavBar .VPFlyout .text {
   font-size: 20px;
 }
 
