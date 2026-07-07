@@ -127,11 +127,15 @@
  * VitePress 给外链 .VPLink 加 .vp-external-link-icon class，
  * 箭头实际是 ::after 伪元素。导航条里这个图标是视觉冗余
  * （用户已经能从 target="_blank" 知道点击行为）。
- * 用 ::after { display:none } 直接干掉伪元素；
- * 文章正文里的外链图标 (.vp-doc a) 不受影响，因为 selector 加了
- * .VPNavBar 限定。 */
+ * 用 ::after { display:none !important } 直接干掉伪元素：
+ * 不加 !important 时 cssnano 会把它和 VitePress 自带的
+ * .vp-external-link-icon::after { content: '' } 合并，
+ * 但 VitePress 还有个 .external-link-icon-enabled 容器类，
+ * 在 :is(...)::after 上设了 display:inline-block 反而赢。
+ * 加 !important 一锤定音。
+ * 限定 .VPNavBar 祖先链，文章正文里的外链图标不受影响。 */
 .VPNavBar .vp-external-link-icon::after {
-  display: none;
+  display: none !important;
 }
 
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
