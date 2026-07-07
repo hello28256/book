@@ -104,6 +104,10 @@ export default withMermaid(
       // 不放"书籍"下拉 —— 笔记已平铺到 docs/ 根，侧栏就是全集。
       nav: [
         {
+          text: '首页',
+          link: 'https://hello28256.github.io/',
+        },
+        {
           text: '在线阅读',
           items: [
             {
