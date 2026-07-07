@@ -123,6 +123,17 @@
   display: none;
 }
 
+/* 隐藏外链 nav 项旁的小箭头 (↗)。
+ * VitePress 给外链 .VPLink 加 .vp-external-link-icon class，
+ * 箭头实际是 ::after 伪元素。导航条里这个图标是视觉冗余
+ * （用户已经能从 target="_blank" 知道点击行为）。
+ * 用 ::after { display:none } 直接干掉伪元素；
+ * 文章正文里的外链图标 (.vp-doc a) 不受影响，因为 selector 加了
+ * .VPNavBar 限定。 */
+.VPNavBar .vp-external-link-icon::after {
+  display: none;
+}
+
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
  * 由 theme/index.ts 的 scroll 监听加 .is-visible 触发（scrollY > 0）。
  * 用 transform + opacity 走 GPU，不触发 layout。 */
