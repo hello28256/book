@@ -46,14 +46,15 @@ book/
 │   ├── .vitepress/
 │   │   ├── config.ts                   # 站点配置，rootSidebar() 平铺扫描 docs/*.md
 │   │   ├── components/
-│   │   │   └── RecentCommits.vue       # 页面底部的提交列表组件
+│   │   │   ├── RecentCommits.vue       # 页面底部的提交列表组件
+│   │   │   └── VersionNotice.vue       # 检测新版本并提示刷新
 │   │   ├── data/
 │   │   │   └── commits.json            # gen-commits 生成的 (gitignore)
 │   │   └── theme/
 │   │       ├── index.ts                # 主题入口 + page-bottom 插槽
-│   │       └── custom.css              # 自定义样式 (品牌色/加粗红/图片居中)
+│   │       └── custom.css              # 自定义样式 (品牌色/加粗绿/图片居中)
 │   ├── index.md                        # 阅读首页 (home layout)
-│   ├── NNN标题.md                       # 38 篇笔记，平铺在根
+│   ├── NNN标题.md                       # 41 篇笔记，平铺在根
 │   ├── public/                         # VitePress 静态资源 (favicon 等)
 │   └── 1001Reading/                    # 老路径重定向层（meta refresh）
 │       └── NNN标题.md                   # 38 个 redirect 页面，老 URL 跳转
@@ -80,13 +81,14 @@ book/
 
 ## 主题定制
 
-`docs/.vitepress/theme/custom.css` 集中管理 3 类视觉定制：
+`docs/.vitepress/theme/custom.css` 集中管理 4 类视觉定制：
 
 - **品牌色**：亮色 `#00c853` / 暗色 `#00e676`（覆盖 `--vp-c-brand-*`）
-- **加粗变红**：`.vp-doc strong` 亮色 `#d32f2f` / 暗色 `#ff6b6b`，作用域仅限文章正文，不影响侧栏/导航里的 `<strong>`
+- **加粗变绿**：`.vp-doc strong` 亮色 `#00c853` / 暗色 `#00e676`，作用域仅限文章正文，不影响侧栏/导航里的 `<strong>`
+- **导航染色**：`.VPNavBar .VPNavBarTitle .title` 和 `.VPNavBar .VPNavBarMenuLink` 用品牌绿
 - **图片居中**：`.vp-doc p > img` 应用 `display:block + margin:0 auto + max-width:100%`，覆盖 Markdown `![](url)` 和 HTML `<img>` 两种写法
 
-主题入口在 `theme/index.ts`：继承 DefaultTheme，在 `page-bottom` 插槽挂载 `RecentCommits`。
+主题入口在 `theme/index.ts`：继承 DefaultTheme，在 `page-bottom` 插槽挂载 `RecentCommits` 和 `VersionNotice`。
 
 ## RecentCommits 组件
 
@@ -96,6 +98,25 @@ book/
 - 浅克隆 / git 不可用时，脚本会写空数组而不是让 build 崩
 - 组件 `RecentCommits.vue` 负责渲染 + 分页 + 跳转 GitHub commit URL
 - 想调整条数：改 `gen-commits.mjs` 的 `LIMIT` 和组件的 `PAGE_SIZE`
+
+## 缓存绕开
+
+GitHub Pages 默认 `cache-control: max-age=600`，CDN（Fastly）也缓存。
+部署完成后用户浏览器本地可能停留老 HTML 长达 10 分钟。
+
+解法：HTML `<head>` 注入一段 inline script，每次访问：
+
+1. `fetch /book/version.json?_=${Date.now()}` —— 随机 query 让 CDN key 唯一；
+   `cache: no-store` 不让浏览器 disk/memory 缓存
+2. 取 URL 上的 `?v=` 参数，与 version.json 的 `.version` 字段比对
+3. 不一致则 `location.replace` 到新 `?v=<新时间戳>` URL —— 新 URL 不在 CDN
+   旧缓存里，浏览器拉到新 HTML
+
+URL 的 `?v=` 是真相源，不依赖 localStorage（隐身/清缓存都一致工作）。
+
+`deploy.yml` 已经在 build 结束时写 `docs/.vitepress/dist/version.json`，
+所以**不需要再改 deploy.yml**。如果想完全关掉这个行为，从 `config.ts`
+删掉 `head` 里的 `script` 项即可。
 
 ## 写文章风格指南
 
