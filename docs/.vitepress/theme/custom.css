@@ -115,6 +115,14 @@
   font-size: 18px;
 }
 
+/* 隐藏 nav 下拉 trigger 旁的 chevron-down 箭头 (▾)。
+ * VitePress 默认渲染 <span class="vpi-chevron-down text-icon">。
+ * 箭头在品牌色 + 20px 文字下视觉冗余，遮挡不必要。
+ * display:none 比 visibility:hidden 更稳：visibility 仍占空间。 */
+.VPNavBar .VPFlyout .text-icon {
+  display: none;
+}
+
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
  * 由 theme/index.ts 的 scroll 监听加 .is-visible 触发（scrollY > 0）。
  * 用 transform + opacity 走 GPU，不触发 layout。 */
