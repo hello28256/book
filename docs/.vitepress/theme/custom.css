@@ -97,6 +97,16 @@
   color: var(--vp-c-brand-2);
 }
 
+/* 顶部 nav 文字统一放大到 20px。
+ * 用户截图反馈默认 14px / 16px 偏小，看着累。
+ * 只动 Logo (.VPNavBarTitle) 和 nav 链接 (.VPNavBarMenuLink) 文字，
+ * 不动 Search 输入框（输入框改 font-size 会撑大高度、破布局）。
+ * 用 .VPNavBar 祖先链 (0,3,0) 压过 VitePress scoped 编译后的 .title[data-v-xxx] (0,2,0)。 */
+.VPNavBar .VPNavBarTitle .title,
+.VPNavBar .VPNavBarMenuLink {
+  font-size: 20px;
+}
+
 /* 页脚 fade-in：默认隐藏（透明 + 略微下移），进入视口后浮现。
  * 由 theme/index.ts 的 scroll 监听加 .is-visible 触发（scrollY > 0）。
  * 用 transform + opacity 走 GPU，不触发 layout。 */
