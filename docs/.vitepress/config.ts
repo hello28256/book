@@ -104,8 +104,12 @@ export default withMermaid(
       // 不放"书籍"下拉 —— 笔记已平铺到 docs/ 根，侧栏就是全集。
       nav: [
         {
+          // target='_self' 让首页在当前 tab 跳转（不走 target=_blank），
+          // 即使是外链。VitePress 1.x NavItemWithLink 支持 target 字段。
+          // 不设 target 时，外链默认 target=_blank（VPLink.vue 里的 isExternal 逻辑）。
           text: '首页',
           link: 'https://hello28256.github.io/',
+          target: '_self',
         },
         {
           text: '在线阅读',
@@ -113,10 +117,12 @@ export default withMermaid(
             {
               text: 'GitHub 仓库',
               link: 'https://github.com/hello28256/book',
+              target: '_self',
             },
             {
               text: 'GitHub Pages',
               link: 'https://hello28256.github.io/book/',
+              target: '_self',
             },
           ],
         },
