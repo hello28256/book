@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: 进入
-      link: /001金句/
+      link: /001名言/
     - theme: alt
       text: GitHub 仓库
       link: https://github.com/hello28256/book
