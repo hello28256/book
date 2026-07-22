@@ -73,10 +73,23 @@ export default withMermaid(
       // v1.6.5 增强：fetch 加 ?_<随机数> 强制绕开 CDN/浏览器对 version.json 的
       // 缓存（CDN key 是完整 URL，不同 query 视为不同资源）。否则旧版 fetch
       // 返回旧 version，用户跳到旧 ?v=，老 HTML 自我循环。
+      //
+      // v1.6.6 增强：原来只在 page load 时跑一次。已经在 tab 里停留了几天、
+      // URL 锁在旧 ?v= 的老用户永远不会重新被检查 —— 他们的 tab 显示老 HTML
+      // 直到手动刷新。补救：每 INTERVAL_MS 再 fetch 一次 version.json，
+      // 不一致就 location.replace。
+      // - 间隔 5 分钟：GitHub Pages 自己的 max-age=600 是 10 分钟，
+      //   5 分钟轮询比 CDN 兜底还快，能确保最长 5 分钟内老 tab 同步。
+      // - 只在 document.visibilityState === 'visible' 时跑，
+      //   后台 tab 不浪费请求、不抢 CDN 配额。
+      // - 不一致才跳，一致完全无感（不弹窗、不 reload）。
       ['script', {}, `
 ;(function () {
-  try {
-    fetch('/book/version.json?_=' + Date.now(), { cache: 'no-store' })
+  var ENDPOINT = '/book/version.json'
+  var INTERVAL_MS = 5 * 60 * 1000
+
+  function check() {
+    fetch(ENDPOINT + '?_=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null })
       .then(function (data) {
         if (!data || !data.version) return
@@ -89,7 +102,21 @@ export default withMermaid(
         }
       })
       .catch(function () { /* 网络失败 / 离线下次再试 */ })
-  } catch (e) { /* localStorage 被禁时静默 */ }
+  }
+
+  // 首次执行（写在函数外，page load 时跑一次）
+  try { check() } catch (e) { /* localStorage / URL API 被禁时静默 */ }
+
+  // 5 分钟轮询：只在 tab 可见时跑
+  setInterval(function () {
+    if (document.visibilityState === 'visible') check()
+  }, INTERVAL_MS)
+
+  // tab 切回前台时立即补一次 —— 避免用户 "后台放半小时 → 切回来" 这种场景
+  // 多等最多 5 分钟
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') check()
+  })
 })();
 `],
     ],

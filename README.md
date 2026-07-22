@@ -114,6 +114,18 @@ GitHub Pages 默认 `cache-control: max-age=600`，CDN（Fastly）也缓存。
 
 URL 的 `?v=` 是真相源，不依赖 localStorage（隐身/清缓存都一致工作）。
 
+**老 tab 兜底**：上面这套只在 **page load** 时跑一次。如果用户点开一篇笔记后
+停留几天、URL 锁在旧 `?v=`，tab 永远显示老 HTML 直到手动刷新。
+补救机制：page load 之后**每 5 分钟**轮询一次 version.json，不一致就走
+`location.replace`。细节：
+
+- 只在 `document.visibilityState === 'visible'` 时跑 —— 后台 tab 不浪费请求
+- `visibilitychange` 切回前台立即补一次，避免"放后台 30 分 → 切回还卡 5 分钟"
+- 一致完全无感（不弹窗、不 reload），不一致才跳一次
+
+5 分钟是 GitHub Pages `max-age=600`（10 分钟）的保守下限 —— CDN 兜底之前
+就能确保老 tab 同步。
+
 `deploy.yml` 已经在 build 结束时写 `docs/.vitepress/dist/version.json`，
 所以**不需要再改 deploy.yml**。如果想完全关掉这个行为，从 `config.ts`
 删掉 `head` 里的 `script` 项即可。
