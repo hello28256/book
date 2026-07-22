@@ -47,17 +47,15 @@ book/
 │   │   ├── config.ts                   # 站点配置，rootSidebar() 平铺扫描 docs/*.md
 │   │   ├── components/
 │   │   │   ├── RecentCommits.vue       # 页面底部的提交列表组件
-│   │   │   └── VersionNotice.vue       # 检测新版本并提示刷新
+│   │   │   └── VersionNotice.vue       # 新版本弹窗 (备用)
 │   │   ├── data/
 │   │   │   └── commits.json            # gen-commits 生成的 (gitignore)
 │   │   └── theme/
 │   │       ├── index.ts                # 主题入口 + page-bottom 插槽
 │   │       └── custom.css              # 自定义样式 (品牌色/加粗绿/图片居中)
 │   ├── index.md                        # 阅读首页 (home layout)
-│   ├── NNN标题.md                       # 41 篇笔记，平铺在根
-│   ├── public/                         # VitePress 静态资源 (favicon 等)
-│   └── 1001Reading/                    # 老路径重定向层（meta refresh）
-│       └── NNN标题.md                   # 38 个 redirect 页面，老 URL 跳转
+│   ├── NNN标题.md                       # 笔记，平铺在根
+│   └── public/                         # VitePress 静态资源 (favicon 等)
 └── .github/workflows/
     └── deploy.yml                      # GitHub Actions 自动部署
 ```
