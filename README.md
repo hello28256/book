@@ -101,34 +101,16 @@ book/
 
 ## 缓存绕开
 
-GitHub Pages 默认 `cache-control: max-age=600`，CDN（Fastly）也缓存。
-部署完成后用户浏览器本地可能停留老 HTML 长达 10 分钟。
+GitHub Pages 默认 `cache-control: max-age=600`，CDN 也缓存 —— 用户停留在
+老 tab 上最长 10 分钟看不到新内容。
 
-解法：HTML `<head>` 注入一段 inline script，每次访问：
+**机制**：`deploy.yml` 在 build 结束写 `version.json`（部署时间戳）。
+`config.ts` 的 inline script（page load + 每 5 分钟轮询 + tab 切回前台
+触发）fetch 这个文件，与 URL 上的 `?v=` 比对，不一致就 `location.replace`。
 
-1. `fetch /book/version.json?_=${Date.now()}` —— 随机 query 让 CDN key 唯一；
-   `cache: no-store` 不让浏览器 disk/memory 缓存
-2. 取 URL 上的 `?v=` 参数，与 version.json 的 `.version` 字段比对
-3. 不一致则 `location.replace` 到新 `?v=<新时间戳>` URL —— 新 URL 不在 CDN
-   旧缓存里，浏览器拉到新 HTML
-
-URL 的 `?v=` 是真相源，不依赖 localStorage（隐身/清缓存都一致工作）。
-
-**老 tab 兜底**：上面这套只在 **page load** 时跑一次。如果用户点开一篇笔记后
-停留几天、URL 锁在旧 `?v=`，tab 永远显示老 HTML 直到手动刷新。
-补救机制：page load 之后**每 5 分钟**轮询一次 version.json，不一致就走
-`location.replace`。细节：
-
-- 只在 `document.visibilityState === 'visible'` 时跑 —— 后台 tab 不浪费请求
-- `visibilitychange` 切回前台立即补一次，避免"放后台 30 分 → 切回还卡 5 分钟"
-- 一致完全无感（不弹窗、不 reload），不一致才跳一次
-
-5 分钟是 GitHub Pages `max-age=600`（10 分钟）的保守下限 —— CDN 兜底之前
-就能确保老 tab 同步。
-
-`deploy.yml` 已经在 build 结束时写 `docs/.vitepress/dist/version.json`，
-所以**不需要再改 deploy.yml**。如果想完全关掉这个行为，从 `config.ts`
-删掉 `head` 里的 `script` 项即可。
+- 真相源是 URL 的 `?v=`，不依赖 localStorage（隐身 / 清缓存一致工作）
+- 后台 tab 不轮询，省 CDN 配额
+- 想要关闭这个行为：删掉 `config.ts` 里 `head` 的 `script` 项即可
 
 ## 写文章风格指南
 
